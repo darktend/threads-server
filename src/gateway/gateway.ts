@@ -3,34 +3,6 @@ import { io, Socket } from "socket.io-client";
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server } from "socket.io";
 
-@Injectable()
-export class SocketClient implements OnModuleInit {
-    public socketClient: Socket;
-
-    constructor() {
-        this.socketClient = io("http://localhost:3000");
-    }
-
-    onModuleInit() {
-        this.registerConsumerEvents();
-    }
-
-    private registerConsumerEvents() {
-        this.socketClient.on("connect", () => {
-            console.log("Connected to Gateway");
-        });
-        // Приймаємо події "likes" і виводимо їх до консолі
-        this.socketClient.on('likes', (payload: any) => {
-            console.log('SocketClient');
-            console.log('payload', payload);
-        });
-    }
-
-    // Метод для відправлення повідомлення про лайк
-    sendLike(threadId: string, userId: any) {
-        this.socketClient.emit('likes', { threadId, userId });
-    }
-}
 
 @Injectable()
 @WebSocketGateway({
